@@ -2003,7 +2003,8 @@ function reload_map_markers_callback(data)
 				
 				if (!marker.getInfoState())
 				{
-					google.maps.event.trigger(marker, 'click');
+					//google.maps.event.trigger(marker, 'click');
+					map_marker_click(marker);
 				}
 			}
 			else
@@ -2032,14 +2033,16 @@ function reload_map_markers_callback(data)
 				{
 					if (!marker.getBrother().getInfoState())
 					{
-						google.maps.event.trigger(marker.getBrother(), 'click');
+						//google.maps.event.trigger(marker.getBrother(), 'click');
+						panorama_marker_click(marker);
 					}
 				}
 				else
 				{
 					if (!marker.getInfoState())
 					{
-						google.maps.event.trigger(marker, 'click');
+						//google.maps.event.trigger(marker, 'click');
+						map_marker_click(marker);
 					}
 				}
 			}
@@ -2257,6 +2260,80 @@ function load_map_marker(rowID, lat, lng, id, addeds, present)
 			//alert('saved!');
 		//}
 		//keep.push(newmarker);
+	}
+}
+
+function map_marker_click(marker)
+{
+	if (!marker.getInfoWindow())
+	{
+		create_marker_infowindow_contents(marker);
+	}
+	if (marker.getEditorWindow().getWindowState())
+	{
+		marker.setDraggable(false);
+		marker.getBrother().setDraggable(false);
+		marker.getEditorWindow().setWindowState(false);
+		marker.getEditorWindow().close();
+		return;
+	}
+	if ((gemni_map_marker_full_context_menu.getCurrentControl() == marker) || (gemni_map_marker_partial_context_menu.getCurrentControl() == marker))
+	{
+		return;
+	}
+	if (!marker.getInfoState())
+	{
+		if (marker.getBrother().getInfoState())
+		{
+			marker.getBrother().setInfoState(false);
+			marker.getInfoWindow().close();
+		}
+		reload_marker_contents(marker);
+		marker.setInfoState(true);
+		marker.getInfoWindow().open(gemni_map, marker);
+	}
+	else
+	{
+		marker.getBrother().setInfoState(false);
+		marker.setInfoState(false);
+		marker.getInfoWindow().close();
+	}
+}
+
+function panorama_marker_click(marker)
+{
+	if (!marker.getBrother().getInfoWindow())
+	{
+		create_marker_infowindow_contents(marker);
+	}
+	if (marker.getBrother().getEditorWindow().getWindowState())
+	{
+		marker.setDraggable(false);
+		marker.getBrother().setDraggable(false);
+		marker.getEditorWindow().setWindowState(false);
+		marker.getEditorWindow().close();
+		return;
+	}
+	if ((gemni_panorama_marker_full_context_menu.getCurrentControl() == marker.getBrother()) || (gemni_panorama_marker_partial_context_menu.getCurrentControl() == marker.getBrother()))
+	{
+		return;
+	}
+	if (!marker.getBrother().getInfoState())
+	{
+		if (marker.getInfoState())
+		{
+			marker.setInfoState(false);
+			marker.getInfoWindow().close();
+		}
+		reload_marker_contents(marker.getBrother());
+		marker.getBrother().setInfoState(true);
+		marker.getInfoWindow().open(gemni_panorama, marker.getBrother());
+	}
+	else
+	{
+		marker.getBrother().setInfoState(false);
+		marker.setInfoState(false);
+		marker.getInfoWindow().close();
 	}
 }
 
@@ -4352,6 +4429,7 @@ function generate_marker_click_position(rowID, position, onPanorama, forcePanora
 			{
 				marker.setFull(gemni_future_marker_click_full);
 			}
+			gemni_future_marker_click_full = null;
 			if (gemni_panorama.getVisible())
 			{
 				gemni_panorama.setPosition(marker.getPosition());
@@ -4360,7 +4438,9 @@ function generate_marker_click_position(rowID, position, onPanorama, forcePanora
 			
 			if (!marker.getInfoState())
 			{
-				google.maps.event.trigger(marker, 'click');
+				//alert('map marker click triggering');
+				//google.maps.event.trigger(marker, 'click');
+				map_marker_click(marker);
 			}
 		}
 		else
@@ -4382,6 +4462,7 @@ function generate_marker_click_position(rowID, position, onPanorama, forcePanora
 			{
 				marker.setFull(gemni_future_marker_click_full);
 			}
+			gemni_future_marker_click_full = null;
 			gemni_panorama.setPosition(marker.getPosition());
 			if (forcePanorama)
 			{
@@ -4393,7 +4474,9 @@ function generate_marker_click_position(rowID, position, onPanorama, forcePanora
 			
 			if (!marker.getBrother().getInfoState())
 			{
-				google.maps.event.trigger(marker.getBrother(), 'click');
+				//alert('panorama marker click triggering');
+				//google.maps.event.trigger(marker.getBrother(), 'click');
+				panorama_marker_click(marker);
 			}
 		}
 		else
@@ -4432,13 +4515,15 @@ function generate_marker_click(rowID, onPanorama, forcePanorama)
 			{
 				marker.setFull(gemni_future_marker_click_full);
 			}
+			gemni_future_marker_click_full = null;
 			if (gemni_panorama.getVisible())
 			{
 				gemni_panorama.setPosition(marker.getPosition());
 			}
 			gemni_map.setCenter(marker.getPosition());
-			
-			google.maps.event.trigger(marker, 'click');
+			//alert('map marker click triggering');
+			//google.maps.event.trigger(marker, 'click');
+			map_marker_click(marker);
 		}
 		else
 		{
@@ -4455,6 +4540,7 @@ function generate_marker_click(rowID, onPanorama, forcePanorama)
 			{
 				marker.setFull(gemni_future_marker_click_full);
 			}
+			gemni_future_marker_click_full = null;
 			gemni_panorama.setPosition(marker.getPosition());
 			if (forcePanorama)
 			{
@@ -4463,8 +4549,9 @@ function generate_marker_click(rowID, onPanorama, forcePanorama)
 					gemni_panorama.setVisible(true);
 				}
 			}
-			
-			google.maps.event.trigger(marker.getBrother(), 'click');
+			//alert('panorama marker click triggering');
+			//google.maps.event.trigger(marker.getBrother(), 'click');
+			panorama_marker_click(marker);
 		}
 		else
 		{

@@ -248,16 +248,19 @@ function check_auto_complete_placeholder()
 function build_geocoder_markers(map, panorama)
 {
 	var latlng = new google.maps.LatLng(0, 0);
+	//var symbol = {path: google.maps.SymbolPath.CIRCLE};
 	gemni_map_geocoder_marker = new google.maps.Marker
 	({
 		position: latlng, 
 		cursor: 'pointer',
+		label: ' ',
 		draggable: true
 	});
 	gemni_panorama_geocoder_marker = new google.maps.Marker
 	({
 		position: latlng, 
 		cursor: 'pointer',
+		label: ' ',
 		draggable: true
 	});
 	create_geocoder_marker_infowindow_contents(gemni_map_geocoder_marker);
@@ -2878,7 +2881,7 @@ function create_restart_button()
 	{
 		//google.accounts.user.logout(function(){}, gemni_fusiontables_scope);
 		//logout();
-		eraseCookie('gemni.project.state.' + gemni_fusiontables_test_data_source);
+		eraseCookie('fusionmarkers.project.state.' + gemni_fusiontables_test_data_source);
 		window.location.reload();
 	});
 	gemni_button_bar_subdiv.appendChild(gemni_restart_button_div);
@@ -4595,9 +4598,9 @@ function save_gemni_cookie_from_url(values)
 		cookie += values[i] + "+";
 	}
 	//alert("save-cookie: " + cookie);
-	//alert('url: ' + 'gemni.project.state.' + gemni_fusiontables_test_data_source);
+	//alert('url: ' + 'fusionmarkers.project.state.' + gemni_fusiontables_test_data_source);
 	//alert('url: ' + cookie);
-	createCookie('gemni.project.state.' + gemni_fusiontables_test_data_source, cookie, 15);
+	createCookie('fusionmarkers.project.state.' + gemni_fusiontables_test_data_source, cookie, 15);
 }
 
 function save_gemni_cookie()
@@ -4660,9 +4663,9 @@ function save_gemni_cookie()
 	}
 	//alert(cookie);
 	//alert("save-cookie: " + cookie);
-	//alert('normal: ' + 'gemni.project.state.' + gemni_fusiontables_data_source);
+	//alert('normal: ' + 'fusionmarkers.project.state.' + gemni_fusiontables_data_source);
 	//alert(cookie);
-	createCookie('gemni.project.state.' + gemni_fusiontables_data_source, cookie, 15);
+	createCookie('fusionmarkers.project.state.' + gemni_fusiontables_data_source, cookie, 15);
 }
 
 function get_url_vars()
@@ -4829,7 +4832,7 @@ function load_gemni_url_vars()
 
 function load_gemni_cookie()
 {
-	var cookie = readCookie('gemni.project.state.' + gemni_fusiontables_test_data_source);
+	var cookie = readCookie('fusionmarkers.project.state.' + gemni_fusiontables_test_data_source);
 	//alert('load: ' + cookie);
 	if (cookie)
 	{

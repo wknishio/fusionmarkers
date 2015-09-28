@@ -930,15 +930,15 @@ function create_map_controls()
 	gemni_auto_complete_div = document.createElement('DIV');
 	gemni_auto_complete_div.style.display = 'inline';
 	gemni_auto_complete_div.style.paddingTop = '5px';
-	gemni_auto_complete_div.style.paddingLeft = gemni_mobile?'5px':'0px';
+	gemni_auto_complete_div.style.paddingLeft = gemni_mobile?'0px':'0px';
 	gemni_auto_complete_div.className = 'gemni_auto_complete';
-	gemni_auto_complete_div.index = 1;
+	gemni_auto_complete_div.index = 3;
 	
 	gemni_text_input_div = document.createElement('DIV');
 	gemni_text_input_div.style.paddingTop = '5px';
 	gemni_text_input_div.style.paddingLeft = '0px';
 	gemni_text_input_div.className = 'gemni_auto_complete';
-	gemni_text_input_div.index = 1;
+	gemni_text_input_div.index = 3;
 	
 	gemni_auto_complete_input_subdiv = document.createElement('DIV');
 	gemni_auto_complete_input_subdiv.style.display = 'inline';
@@ -2811,7 +2811,7 @@ function create_panorama_menu(controlDiv, map)
 {
 	controlDiv.style.display = 'inline';
 	controlDiv.style.paddingTop = '5px';
-	controlDiv.style.paddingLeft = gemni_mobile?'5px':'0px';
+	controlDiv.style.paddingLeft = gemni_mobile?'0px':'0px';
 	controlDiv.style.textAlign = 'center';
 	
 	gemni_panorama_menu_subdiv = document.createElement('DIV');
@@ -3253,7 +3253,7 @@ function check_panorama_size()
 			if (!gemni_auto_complete_on_map)
 			{
 				gemni_auto_complete_div.style.paddingTop = '5px';
-				gemni_auto_complete_div.style.paddingLeft = gemni_mobile?'5px':'0px';
+				gemni_auto_complete_div.style.paddingLeft = gemni_mobile?'0px':'0px';
 				gemni_extra_panorama_buttons_subdiv.removeChild(gemni_panorama_menu_subdiv);
 				gemni_panorama_menu_div.appendChild(gemni_panorama_menu_subdiv);
 				gemni_panorama.controls[google.maps.ControlPosition.TOP_LEFT].pop();
@@ -3298,7 +3298,7 @@ function check_panorama_size()
 			if (!gemni_auto_complete_on_map)
 			{
 				gemni_auto_complete_div.style.paddingTop = '5px';
-				gemni_auto_complete_div.style.paddingLeft = gemni_mobile?'5px':'0px';
+				gemni_auto_complete_div.style.paddingLeft = gemni_mobile?'0px':'0px';
 				gemni_extra_panorama_buttons_subdiv.removeChild(gemni_panorama_menu_subdiv);
 				gemni_panorama_menu_div.appendChild(gemni_panorama_menu_subdiv);
 				gemni_panorama.controls[google.maps.ControlPosition.TOP_LEFT].pop();
@@ -3362,7 +3362,7 @@ function check_panorama_size()
 			if (!gemni_auto_complete_on_map)
 			{
 				gemni_auto_complete_div.style.paddingTop = '5px';
-				gemni_auto_complete_div.style.paddingLeft = gemni_mobile?'5px':'0px';
+				gemni_auto_complete_div.style.paddingLeft = gemni_mobile?'0px':'0px';
 				gemni_extra_panorama_buttons_subdiv.removeChild(gemni_panorama_menu_subdiv);
 				gemni_panorama_menu_div.appendChild(gemni_panorama_menu_subdiv);
 				gemni_panorama.controls[google.maps.ControlPosition.TOP_LEFT].pop();
@@ -3407,7 +3407,7 @@ function check_panorama_size()
 			if (!gemni_auto_complete_on_map)
 			{
 				gemni_auto_complete_div.style.paddingTop = '5px';
-				gemni_auto_complete_div.style.paddingLeft = gemni_mobile?'5px':'0px';
+				gemni_auto_complete_div.style.paddingLeft = gemni_mobile?'0px':'0px';
 				gemni_extra_panorama_buttons_subdiv.removeChild(gemni_panorama_menu_subdiv);
 				gemni_panorama_menu_div.appendChild(gemni_panorama_menu_subdiv);
 				gemni_panorama.controls[google.maps.ControlPosition.TOP_LEFT].pop();
@@ -3480,7 +3480,7 @@ function check_panorama_size()
 			if (gemni_auto_complete_on_map)
 			{
 				gemni_auto_complete_div.style.paddingTop = '5px';
-				gemni_auto_complete_div.style.paddingLeft = gemni_mobile?'5px':'0px';
+				gemni_auto_complete_div.style.paddingLeft = gemni_mobile?'5px':'5px';
 				gemni_panorama_menu_div.removeChild(gemni_panorama_menu_subdiv);
 				gemni_extra_panorama_buttons_subdiv.appendChild(gemni_panorama_menu_subdiv);
 				gemni_map.controls[google.maps.ControlPosition.TOP_LEFT].pop();
@@ -3522,7 +3522,7 @@ function check_panorama_size()
 			if (!gemni_auto_complete_on_map)
 			{
 				gemni_auto_complete_div.style.paddingTop = '5px';
-				gemni_auto_complete_div.style.paddingLeft = gemni_mobile?'5px':'0px';
+				gemni_auto_complete_div.style.paddingLeft = gemni_mobile?'0px':'0px';
 				gemni_extra_panorama_buttons_subdiv.removeChild(gemni_panorama_menu_subdiv);
 				gemni_panorama_menu_div.appendChild(gemni_panorama_menu_subdiv);
 				gemni_panorama.controls[google.maps.ControlPosition.TOP_LEFT].pop();
@@ -5555,6 +5555,7 @@ function start()
 				imageDateControl: true,
 				enableCloseButton: false,
 				disableDoubleClickZoom: true,
+				fullScreenControl: false,
 				addressControlOptions: gemni_panorama_address_control_options,
 				position: gemni_panorama_initial_position,
 				pov: gemni_panorama_initial_pov
@@ -5571,6 +5572,7 @@ function start()
 				imageDateControl: true,
 				enableCloseButton: false,
 				disableDoubleClickZoom: true,
+				fullScreenControl: false,
 				addressControlOptions: gemni_panorama_address_control_options,
 				position: gemni_map_initial_latlng,
 				visible: gemni_panorama_visible == 1
@@ -5591,6 +5593,7 @@ function start()
 			streetViewControl: true,
 			overviewMapControl: true,
 			disableDoubleClickZoom: true,
+			fullScreenControl: false,
 			streetView: new google.maps.StreetViewPanorama(gemni_panorama_div, streetViewOptions)
 		};
 	}
@@ -5605,6 +5608,7 @@ function start()
 			imageDateControl: true,
 			enableCloseButton: false,
 			disableDoubleClickZoom: true,
+			fullScreenControl: false,
 			addressControlOptions: gemni_panorama_address_control_options,
 			position: latlng
 		};
@@ -5622,6 +5626,7 @@ function start()
 			streetViewControl: true,
 			overviewMapControl: true,
 			disableDoubleClickZoom: true,
+			fullScreenControl: false,
 			streetView: new google.maps.StreetViewPanorama(gemni_panorama_div, streetViewOptions)
 		};
 	}
@@ -5651,7 +5656,8 @@ function start()
 	gemni_panorama_menu_div = document.createElement('DIV');
 	create_panorama_menu(gemni_panorama_menu_div, gemni_map);
 	gemni_panorama_menu_div.className = 'gemni_panorama_menu';
-	gemni_panorama_menu_div.index = 1;
+	gemni_panorama_menu_div.style.paddingLeft = '5px'
+	gemni_panorama_menu_div.index = 3;
 	gemni_panorama.controls[google.maps.ControlPosition.TOP_LEFT].push(gemni_panorama_menu_div);
 	build_geocoder_markers(gemni_map, gemni_panorama);
 	/*if (gemni_mobile)

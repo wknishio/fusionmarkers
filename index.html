@@ -1,0 +1,49 @@
+<html>
+<head>
+<meta name="viewport" content="width=device-width,height=device-height,initial-scale=1.0,user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta names="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+<title>
+GEMNI - Generic Experimental Maps Navigation Interface
+</title>
+<link rel="shortcut icon" href="favicon.ico">
+<link href="gemni-style.css" rel="stylesheet" type="text/css">
+<script type="text/javascript" src="l10n.js"/></script>
+<script type="text/javascript" src="localizations.js"/></script>
+<script type="text/javascript">
+
+//var gemni_fusiontables_scope = "https://www.google.com/fusiontables/api/query";
+
+function load_localizations()
+{
+	var public_link = document.getElementById("public_link");
+	var auth_link = document.getElementById("auth_link");
+	//var oauth_link = document.getElementById("oauth_link");
+	//var logout_link = document.getElementById("logout_link");
+	public_link.innerHTML = "Public interface".toLocaleString();
+	auth_link.innerHTML = "Authenticated interface".toLocaleString();
+	//oauth_link.innerHTML = "OAuth2 interface".toLocaleString();
+	//logout_link.innerHTML = "Logout".toLocaleString();
+}
+
+/*function logout()
+{
+	google.accounts.user.logout();
+}*/
+</script>
+</head>
+<body onload="load_localizations()">
+	<h1>
+		FusionMarkers
+	</h1>
+	<p>
+		Links:
+	</p>
+	<p>
+		<a id="public_link" href="public.html" target="_blank"></a>
+	</p>
+	<p>
+		<a id="auth_link" href="oauth.html" target="_blank"></a>
+	</p>
+</body>
+</html>

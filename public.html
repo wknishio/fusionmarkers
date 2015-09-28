@@ -1,0 +1,54 @@
+<html>
+<head>
+<meta name="viewport" content="width=device-width,height=device-height,initial-scale=1.0,user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta names="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+<title>
+FusionMarkers
+</title>
+<link rel="stylesheet" type="text/css" media="all" href="gemni-style.css">
+<link rel="stylesheet" type="text/css" media="print" href="gemni-print.css">
+<link rel="stylesheet" type="text/css" media="all" href="jquery.autocomplete.css">
+<link rel="stylesheet" type="text/css" media="all" href="gemni-calendar-blue.css" title="blue">
+<link rel="shortcut icon" href="favicon.ico">
+
+<!-- <script type="text/javascript" src="http://code.google.com/apis/gears/gears_init.js"></script> -->
+<script type="text/javascript" src="l10n.js"/></script>
+<script type="text/javascript" src="localizations.js"/></script>
+<script type="text/javascript" src="jquery-1.11.1.min.js"></script>
+<script type="text/javascript" src="jquery.autocomplete.js"></script>
+
+<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?sensor=false&libraries=geometry,places,weather"></script>
+
+<script type="text/javascript" src="1-gemni-calendar.js"/></script>
+<script type="text/javascript" src="2-gemni-calendar-setup.js"/></script>
+<script type="text/javascript" src="3-gemni-calendar-i10n.js"/></script>
+<script type="text/javascript" src="4-gemni-infobubble.js"/></script>
+<script type="text/javascript" src="5-gemni-prototypes.js"/></script>
+<script type="text/javascript" src="6-gemni-menus.js"/></script>
+<script type="text/javascript" src="7-gemni-markerclustererplus.js"/></script>
+<script type="text/javascript" src="8-gemni-geo.js"/></script>
+<script type="text/javascript" src="9-gemni-longclick.js"/></script>
+<script type="text/javascript" src="10-gemni-core.js"/></script>
+<script type="text/javascript">
+
+function body_loaded()
+{
+	window['gemni_test_data_access'] = false;
+	window['gemni_need_logout_button'] = false;
+	initialize();
+}
+
+</script>
+
+</head>
+<body onload="body_loaded()">
+<div id="content_canvas" style="width:100%; height:100%;">
+<div id="input_text_canvas" style="display:inline;"></div>
+<div id="main_canvas" style="display:block;">
+<div id="map_canvas" style="display:block; width:50%; height:100%; position:absolute; left:0px;"></div>
+<div id="panorama_canvas" style="display:block; width:50%; height:100%; position:absolute; right:0px; z-index:0;"></div>
+</div>
+</div>
+</body>
+</html>

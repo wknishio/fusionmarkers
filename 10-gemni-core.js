@@ -549,7 +549,7 @@ function install_calendar(trigger, input)
 		ifFormat: "%Y.%m.%d %H:%M",
 		weekNumbers: false,
 		showOthers: true,
-		align: 'Bl',
+		align: 'cc',
 		button : trigger
     });
 }

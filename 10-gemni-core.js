@@ -935,13 +935,13 @@ function create_map_controls()
 	gemni_auto_complete_div.style.paddingTop = '5px';
 	gemni_auto_complete_div.style.paddingLeft = gemni_mobile?'0px':'0px';
 	gemni_auto_complete_div.className = 'gemni_auto_complete';
-	gemni_auto_complete_div.index = 3;
+	gemni_auto_complete_div.index = 5;
 	
 	gemni_text_input_div = document.createElement('DIV');
 	gemni_text_input_div.style.paddingTop = '5px';
 	gemni_text_input_div.style.paddingLeft = '0px';
 	gemni_text_input_div.className = 'gemni_auto_complete';
-	gemni_text_input_div.index = 3;
+	gemni_text_input_div.index = 5;
 	
 	gemni_auto_complete_input_subdiv = document.createElement('DIV');
 	gemni_auto_complete_input_subdiv.style.display = 'inline';
@@ -5238,9 +5238,11 @@ function runSelect(query, callback, parameters)
 		}
 		oauth2.login(window['gemni_oauth2_request'], oauth2_refresh_callback, oauth2_error_callback);*/
 		//return;
-		data_values = {sql: query, access_token: window['gemni_oauth2_token']};
-		jQuery.ajax(url, {data: data_values, success: window[callback], error: oauth2_error_callback, contentType: 'text/plain; charset=UTF-8', dataType: 'jsonp'});
+		//data_values = {sql: query, access_token: window['gemni_oauth2_token']};
+		//jQuery.ajax(url, {data: data_values, success: window[callback], error: oauth2_error_callback, contentType: 'text/plain; charset=UTF-8', dataType: 'jsonp'});
 		//url = (url) + ('?sql=') + encodeURIComponent(query) + ('&access_token=') + encodeURIComponent(window['gemni_oauth2_token']);
+		data_values = {sql: query, key: window['gemni_api_key']};
+		jQuery.ajax(url, {data: data_values, success: window[callback], error: error_callback, contentType: 'text/plain; charset=UTF-8', dataType: 'jsonp'});
 	}
 	else
 	{
@@ -5746,7 +5748,7 @@ function start()
 	create_panorama_menu(gemni_panorama_menu_div, gemni_map);
 	gemni_panorama_menu_div.className = 'gemni_panorama_menu';
 	gemni_panorama_menu_div.style.paddingLeft = '5px'
-	gemni_panorama_menu_div.index = 3;
+	gemni_panorama_menu_div.index = 5;
 	gemni_panorama.controls[google.maps.ControlPosition.TOP_LEFT].push(gemni_panorama_menu_div);
 	build_geocoder_markers(gemni_map, gemni_panorama);
 	/*if (gemni_mobile)

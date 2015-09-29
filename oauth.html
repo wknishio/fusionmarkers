@@ -12,7 +12,6 @@ Fusion Markers
 <link rel="stylesheet" type="text/css" media="all" href="gemni-calendar-blue.css" title="blue">
 <link rel="shortcut icon" href="favicon.ico">
 
-<!-- <script type="text/javascript" src="http://code.google.com/apis/gears/gears_init.js"></script> -->
 <script type="text/javascript" src="l10n.js"/></script>
 <script type="text/javascript" src="localizations.js"/></script>
 <!-- <script type="text/javascript" src="https://www.google.com/jsapi"></script> -->
@@ -52,7 +51,12 @@ function wait_applet_load()
 	if (window.location.href.indexOf("https:") == -1)
 	{
 		window.location.href = "https://" + window.location.host + window.location.pathname;
+		//window.location.reload();
 		return;
+	}
+	else
+	{
+		gapi.auth.init(oauth2_login)
 	}
 	
 	/*if (!document.gemni_client)
@@ -75,7 +79,8 @@ function wait_applet_load()
 		return;
 	}*/
 	//gdata_load();
-	gapi.auth.init(oauth2_login)
+	//gapi.auth.init(oauth2_login);
+	//gapi.client.load('oauth2', 'v2', oauth2_login);
 	//document.gemni_client.setToken(gemni_authsub_token);
 }
 
@@ -84,14 +89,18 @@ function oauth2_init_callback(token)
 	//alert(token);
 	if (token.access_token)
 	{
+		//alert('immediate == true');
 		window['gemni_oauth2_token'] = token.access_token;
 		window['gemni_test_data_access'] = true;
 		window['gemni_need_logout_button'] = true;
 		window['gemni_client'] = window;
+		var expires_in = (parseInt(token.expires_in) * 1000) - (1000 * 60 * 5);
+		window['gemni_oauth2_refresh'] = setTimeout(function() {gapi.auth.authorize({client_id: window['gemni_oauth2_client_id'], immediate: true, scope: 'https://www.googleapis.com/auth/fusiontables https://www.googleapis.com/auth/userinfo.profile'}, oauth2_refresh_callback);}, expires_in);
 		initialize();
 	}
 	else
 	{
+		//alert('immediate == false');
 		setTimeout(function() {gapi.auth.authorize({client_id: window['gemni_oauth2_client_id'], immediate: false, scope: 'https://www.googleapis.com/auth/fusiontables https://www.googleapis.com/auth/userinfo.profile'}, oauth2_init_callback);}, 500);
 	}
 }
@@ -101,7 +110,7 @@ function oauth2_login()
 	//alert('oauth2_login');
 	//oauth2.login(window['gemni_oauth2_request'], oauth2_success_callback, oauth2_error_callback);
 	gapi.client.setApiKey(window['gemni_api_key']);
-	gapi.auth.authorize({client_id: window['gemni_oauth2_client_id'], immediate: true, scope: 'https://www.googleapis.com/auth/fusiontables https://www.googleapis.com/auth/userinfo.profile'}, oauth2_init_callback);
+	setTimeout(function() {gapi.auth.authorize({client_id: window['gemni_oauth2_client_id'], immediate: true, scope: 'https://www.googleapis.com/auth/fusiontables https://www.googleapis.com/auth/userinfo.profile'}, oauth2_init_callback);}, 500);
 	//setTimeout(function() {gapi.auth.authorize({client_id: window['gemni_oauth2_client_id'], immediate: true, scope: 'https://www.googleapis.com/auth/fusiontables https://www.googleapis.com/auth/userinfo.profile'}, oauth2_init_callback);}, 500);
 	//if (!window['gemni_oauth2_token'])
 	//{

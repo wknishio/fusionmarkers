@@ -104,6 +104,7 @@ var gemni_map_layers_togglers;
 var gemni_map_layers_toggle_div;
 var gemni_mobile = false;
 var gemni_panorama_was_visible = false;
+var gemni_oauth2_refresh;
 //var gemni_mouseover_marker_in_panorama = false;
 //var gemni_client = window['gemni_client'];
 /*window[''] = function(data)
@@ -907,14 +908,10 @@ function create_map_layers()
 		}
 	}
 	
-	/*if (gemni_cookie_values && gemni_cookie_values[19] && gemni_cookie_values[19] != ' ')
-	{
-		if (gemni_cookie_values[19] == '1')
-		{
-			streetview_layer.setMap(gemni_map);
-			streetview_layer_toggle_radio.checked = true;
-		}
-	}*/
+	//if (gemni_cookie_values && gemni_cookie_values[19] && gemni_cookie_values[19] != ' ')
+	//{
+		//window['gemni_oauth2_token'] = gemni_cookie_values[19];
+	//}
 	
 	/*if (gemni_cookie_values && gemni_cookie_values[20] && gemni_cookie_values[20] != ' ')
 	{
@@ -2881,7 +2878,7 @@ function create_restart_button()
 	{
 		//google.accounts.user.logout(function(){}, gemni_fusiontables_scope);
 		//logout();
-		eraseCookie('fusionmarkers.project.state.' + gemni_fusiontables_test_data_source);
+		eraseCookie('gemni.project.state.' + gemni_fusiontables_test_data_source);
 		window.location.reload();
 	});
 	gemni_button_bar_subdiv.appendChild(gemni_restart_button_div);
@@ -4598,9 +4595,9 @@ function save_gemni_cookie_from_url(values)
 		cookie += values[i] + "+";
 	}
 	//alert("save-cookie: " + cookie);
-	//alert('url: ' + 'fusionmarkers.project.state.' + gemni_fusiontables_test_data_source);
+	//alert('url: ' + 'gemni.project.state.' + gemni_fusiontables_test_data_source);
 	//alert('url: ' + cookie);
-	createCookie('fusionmarkers.project.state.' + gemni_fusiontables_test_data_source, cookie, 15);
+	createCookie('gemni.project.state.' + gemni_fusiontables_test_data_source, cookie, 15);
 }
 
 function save_gemni_cookie()
@@ -4652,6 +4649,7 @@ function save_gemni_cookie()
 	values[16] = gemni_map_layers['traffic'].getMap()?1:0;
 	values[17] = gemni_map_layers['transit'].getMap()?1:0;
 	values[18] = gemni_map_layers['streetview'].getMap()?1:0;
+	//values[19] = window['gemni_oauth2_token']?window['gemni_oauth2_token']:' ';
 	//values[18] = gemni_map_layers['weather'].getMap()?1:0;
 	//values[20] = gemni_map_layers['cloud'].getMap()?1:0;
 	
@@ -4663,9 +4661,9 @@ function save_gemni_cookie()
 	}
 	//alert(cookie);
 	//alert("save-cookie: " + cookie);
-	//alert('normal: ' + 'fusionmarkers.project.state.' + gemni_fusiontables_data_source);
+	//alert('normal: ' + 'gemni.project.state.' + gemni_fusiontables_data_source);
 	//alert(cookie);
-	createCookie('fusionmarkers.project.state.' + gemni_fusiontables_data_source, cookie, 15);
+	createCookie('gemni.project.state.' + gemni_fusiontables_data_source, cookie, 15);
 }
 
 function get_url_vars()
@@ -4804,16 +4802,20 @@ function load_gemni_url_vars()
 			gemni_cookie_values[18] = vars["mlwt"];
 			gemni_loaded_url = true;
 		}
-		if (vars["mlsv"])
+		/*if (window['gemni_oauth2_token'])
+		{
+			gemni_cookie_values[19] = window['gemni_oauth2_token'];
+		}*/
+		/*if (vars["mlsv"])
 		{
 			gemni_cookie_values[19] = vars["mlsv"];
 			gemni_loaded_url = true;
-		}
-		if (vars["mlc"])
+		}*/
+		/*if (vars["mlc"])
 		{
 			gemni_cookie_values[20] = vars["mlc"];
 			gemni_loaded_url = true;
-		}
+		}*/
 		//gemni_loaded_url = refresh;
 		
 		if (gemni_loaded_url)
@@ -4832,7 +4834,7 @@ function load_gemni_url_vars()
 
 function load_gemni_cookie()
 {
-	var cookie = readCookie('fusionmarkers.project.state.' + gemni_fusiontables_test_data_source);
+	var cookie = readCookie('gemni.project.state.' + gemni_fusiontables_test_data_source);
 	//alert('load: ' + cookie);
 	if (cookie)
 	{
@@ -5085,6 +5087,8 @@ function oauth2_refresh_callback(token)
 	if (token.access_token)
 	{
 		window['gemni_oauth2_token'] = token.access_token;
+		var expires_in = (parseInt(token.expires_in) * 1000) - (1000 * 60 * 5);
+		window['gemni_oauth2_refresh'] = setTimeout(function() {gapi.auth.authorize({client_id: window['gemni_oauth2_client_id'], immediate: true, scope: 'https://www.googleapis.com/auth/fusiontables https://www.googleapis.com/auth/userinfo.profile'}, oauth2_refresh_callback);}, expires_in);
 	}
 	else
 	{
@@ -5098,6 +5102,10 @@ function oauth2_error_callback(error)
 	if (window['gemni_oauth2_token'])
 	{	
 		//setTimeout(function() {oauth2.login(window['gemni_oauth2_request'], oauth2_refresh_callback, oauth2_error_callback);}, 500);
+		if (window['gemni_oauth2_refresh'])
+		{
+			clearTimeout(window['gemni_oauth2_refresh']);
+		}
 		setTimeout(function() {gapi.auth.authorize({client_id: window['gemni_oauth2_client_id'], immediate: true, scope: 'https://www.googleapis.com/auth/fusiontables https://www.googleapis.com/auth/userinfo.profile'}, oauth2_refresh_callback);}, 500);
 	}
 	else
@@ -5755,15 +5763,7 @@ function start()
 	{
 		initialize_window_dimensions();
 	}*/
-	if (!gemni_loaded_cookie)
-	{
-		initialize_window_dimensions();
-	}
-	else
-	{
-		check_window_dimensions();
-		reload_gemni_cookie();
-	}
+	
 	$("#main_canvas").bind("resize", check_window_dimensions);
 	window.onresize = check_window_dimensions;
 	//google.maps.event.addListener(gemni_panorama, 'visible_changed', check_panorama_size);
@@ -5815,6 +5815,15 @@ function start()
 	//check_window_dimensions();
 	gemni_ignore_panorama_location = false;
 	check_panorama_size();
+	if (!gemni_loaded_cookie)
+	{
+		initialize_window_dimensions();
+	}
+	else
+	{
+		check_window_dimensions();
+		reload_gemni_cookie();
+	}
 	//check_panorama_visible();
 	//var transitLayer = new google.maps.TransitLayer();
 	//transitLayer.setMap(gemni_map);
@@ -5847,5 +5856,6 @@ window['test_data_source_callback'] = test_data_source_callback;
 window['test_data_access_callback'] = test_data_access_callback;
 window['success_callback'] = success_callback;
 window['error_callback'] = error_callback;
+window['gemni_oauth2_refresh'] = gemni_oauth2_refresh;
 
 // @js_externs function setup_calendar(params) = {};function logout() = {};function runSelect(query, callback, parameters) = {} 

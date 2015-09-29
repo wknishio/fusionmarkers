@@ -5098,7 +5098,7 @@ function oauth2_refresh_callback(token)
 
 function oauth2_error_callback(error)
 {
-	//alert(error);
+	//alert('oauth2_error_callback');
 	if (window['gemni_oauth2_token'])
 	{	
 		//setTimeout(function() {oauth2.login(window['gemni_oauth2_request'], oauth2_refresh_callback, oauth2_error_callback);}, 500);

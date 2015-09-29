@@ -15,12 +15,13 @@ Fusion Markers
 <!-- <script type="text/javascript" src="http://code.google.com/apis/gears/gears_init.js"></script> -->
 <script type="text/javascript" src="l10n.js"/></script>
 <script type="text/javascript" src="localizations.js"/></script>
-<script type="text/javascript" src="https://www.google.com/jsapi"></script>
+<!-- <script type="text/javascript" src="https://www.google.com/jsapi"></script> -->
+<script type="text/javascript" src="https://apis.google.com/js/client.js"></script>
 <script type="text/javascript" src="jquery-1.11.1.min.js"></script>
 <script type="text/javascript" src="jquery.autocomplete.js"></script>
 <script type="text/javascript" src="gwt-oauth2.js"/></script>
 
-<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?sensor=false&libraries=geometry,places,drawing,weather"></script>
+<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?sensor=true&libraries=geometry,places,drawing,weather&signed-in=true"></script>
 
 <script type="text/javascript" src="1-gemni-calendar.js"/></script>
 <script type="text/javascript" src="2-gemni-calendar-setup.js"/></script>
@@ -35,18 +36,19 @@ Fusion Markers
 
 <script type="text/javascript">
 
-google.setOnLoadCallback(wait_applet_load);
+//google.setOnLoadCallback(wait_applet_load);
 
-google.load('gdata', '2.x');
+//google.load('gdata', '2.x');
 
 function logout()
 {
-	oauth2.clearAllTokens();
+	//oauth2.clearAllTokens();
 	oauth2_revoke_token(window['gemni_oauth2_token']);
 }
 
 function wait_applet_load()
 {
+	//alert('wait_applet_load');
 	if (window.location.href.indexOf("https:") == -1)
 	{
 		window.location.href = "https://" + window.location.host + window.location.pathname;
@@ -73,32 +75,38 @@ function wait_applet_load()
 		return;
 	}*/
 	//gdata_load();
-	oauth2_load();
+	gapi.auth.init(oauth2_login)
 	//document.gemni_client.setToken(gemni_authsub_token);
 }
 
-function oauth2_success_callback(token)
+function oauth2_init_callback(token)
 {
 	//alert(token);
-	window['gemni_oauth2_token'] = token;
-	window['gemni_test_data_access'] = true;
-	window['gemni_need_logout_button'] = true;
-	window['gemni_client'] = window;
-	initialize();
-}
-
-function oauth2_load()
-{
-	oauth2_login();
+	if (token.access_token)
+	{
+		window['gemni_oauth2_token'] = token.access_token;
+		window['gemni_test_data_access'] = true;
+		window['gemni_need_logout_button'] = true;
+		window['gemni_client'] = window;
+		initialize();
+	}
+	else
+	{
+		setTimeout(function() {gapi.auth.authorize({client_id: window['gemni_oauth2_client_id'], immediate: false, scope: 'https://www.googleapis.com/auth/fusiontables https://www.googleapis.com/auth/userinfo.profile'}, oauth2_init_callback);}, 500);
+	}
 }
 
 function oauth2_login()
 {
-	oauth2.login(window['gemni_oauth2_request'], oauth2_success_callback, oauth2_error_callback);
-	if (!window['gemni_oauth2_token'])
-	{
-		setTimeout(oauth2_login, 500);
-	}
+	//alert('oauth2_login');
+	//oauth2.login(window['gemni_oauth2_request'], oauth2_success_callback, oauth2_error_callback);
+	gapi.client.setApiKey(window['gemni_api_key']);
+	gapi.auth.authorize({client_id: window['gemni_oauth2_client_id'], immediate: true, scope: 'https://www.googleapis.com/auth/fusiontables https://www.googleapis.com/auth/userinfo.profile'}, oauth2_init_callback);
+	//setTimeout(function() {gapi.auth.authorize({client_id: window['gemni_oauth2_client_id'], immediate: true, scope: 'https://www.googleapis.com/auth/fusiontables https://www.googleapis.com/auth/userinfo.profile'}, oauth2_init_callback);}, 500);
+	//if (!window['gemni_oauth2_token'])
+	//{
+		//setTimeout(oauth2_login, 500);
+	//}
 }
 
 function oauth2_revoke_token(token)
@@ -162,7 +170,7 @@ function oauth2_revoke_error_callback(request, status, error)
 
 </script>
 </head>
-<body onload="" onunload="logout()">
+<body onload="wait_applet_load()" onunload="logout()">
 <div id="content_canvas" style="width:100%; height:100%;">
 <div id="input_text_canvas" style="display:inline;"></div>
 <div id="main_canvas" style="display:block;">

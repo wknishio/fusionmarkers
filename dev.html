@@ -20,7 +20,7 @@ Fusion Markers
 <!-- <script type="text/javascript" src="jquery-ui.min.js"></script>
 <script type="text/javascript" src="jquery.ui.touch-punch.min.js"></script> -->
 
-<script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?sensor=false&libraries=geometry,places,drawing,weather"></script>
+<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?sensor=true&libraries=geometry,places,drawing,weather&signed_in=true"></script>
 
 <script type="text/javascript" src="1-gemni-calendar.js"/></script>
 <script type="text/javascript" src="2-gemni-calendar-setup.js"/></script>
@@ -69,7 +69,7 @@ function wait_applet_load()
 	//document.gemni_client.setUser("gemni.project@gmail.com", "motineiros");
 	window['gemni_username'] = 'gemni.project@gmail.com';
 	window['gemni_password'] = 'motineiros';
-	window['gemni_test_data_access'] = true;
+	window['gemni_test_data_access'] = false;
 	window['gemni_need_logout_button'] = true;
 	window['gemni_client'] = window;
 	//window['gemni_client'] = document.gemni_client;

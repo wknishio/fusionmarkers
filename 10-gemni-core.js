@@ -5078,20 +5078,18 @@ function createXMLHttpRequest()
 
 function oauth2_refresh_callback(token)
 {
-	window['gemni_oauth2_token'] = token;
-	
-	/*if (window['gemni_oauth2_select_task'])
+	//alert('oauth2_refresh_callback');
+	//alert(token.access_token);
+	//alert(token.error);
+	//window['gemni_oauth2_token'] = token;
+	if (token.access_token)
 	{
-		window['gemni_oauth2_select_task']();
-		window['gemni_oauth2_select_task'] = null;
+		window['gemni_oauth2_token'] = token.access_token;
 	}
-	
-	if (window['gemni_oauth2_update_task'])
+	else
 	{
-		window['gemni_oauth2_update_task']();
-		window['gemni_oauth2_update_task'] = null;
-	}*/
-	
+		setTimeout(function() {gapi.auth.authorize({client_id: window['gemni_oauth2_client_id'], immediate: false, scope: 'https://www.googleapis.com/auth/fusiontables https://www.googleapis.com/auth/userinfo.profile'}, oauth2_refresh_callback);}, 500);
+	}
 }
 
 function oauth2_error_callback(error)
@@ -5099,7 +5097,8 @@ function oauth2_error_callback(error)
 	//alert(error);
 	if (window['gemni_oauth2_token'])
 	{	
-		setTimeout(function() {oauth2.login(window['gemni_oauth2_request'], oauth2_refresh_callback, oauth2_error_callback);}, 500);
+		//setTimeout(function() {oauth2.login(window['gemni_oauth2_request'], oauth2_refresh_callback, oauth2_error_callback);}, 500);
+		setTimeout(function() {gapi.auth.authorize({client_id: window['gemni_oauth2_client_id'], immediate: true, scope: 'https://www.googleapis.com/auth/fusiontables https://www.googleapis.com/auth/userinfo.profile'}, oauth2_refresh_callback);}, 500);
 	}
 	else
 	{
@@ -5240,16 +5239,17 @@ function runSelect(query, callback, parameters)
 		oauth2.login(window['gemni_oauth2_request'], oauth2_refresh_callback, oauth2_error_callback);*/
 		//return;
 		data_values = {sql: query, access_token: window['gemni_oauth2_token']};
+		jQuery.ajax(url, {data: data_values, success: window[callback], error: oauth2_error_callback, contentType: 'text/plain; charset=UTF-8', dataType: 'jsonp'});
 		//url = (url) + ('?sql=') + encodeURIComponent(query) + ('&access_token=') + encodeURIComponent(window['gemni_oauth2_token']);
 	}
 	else
 	{
 		//url = (url) + ('?sql=') + encodeURIComponent(query) + ('&key=') + encodeURIComponent(window['gemni_api_key']);
 		data_values = {sql: query, key: window['gemni_api_key']};
+		jQuery.ajax(url, {data: data_values, success: window[callback], error: error_callback, contentType: 'text/plain; charset=UTF-8', dataType: 'jsonp'});
 	}
-	jQuery.ajax(url, {data: data_values, success: window[callback], error: error_callback, contentType: 'text/plain; charset=UTF-8', dataType: 'jsonp'});
 	
-	if (window['gemni_oauth2_token'])
+	/*if (window['gemni_oauth2_token'])
 	{
 		try
 		{
@@ -5268,14 +5268,12 @@ function runSelect(query, callback, parameters)
 			oauth2.login(window['gemni_oauth2_request'], oauth2_refresh_callback, oauth2_error_callback);
 			return;
 		}
-	}
+	}*/
 }
 
 function runUpdate(query, callback, parameters)
 {
 	var url = gemni_fusiontables_api;
-	
-	
 	var data_values;
 	var headers_values;
 	if (window['gemni_oauth2_token'])
@@ -5332,7 +5330,7 @@ function runUpdate(query, callback, parameters)
 	//alert(url);
 	//alert(encodeURIComponent(url));
 	//doAjax(url, "proxy_callback");
-	if (window['gemni_oauth2_token'])
+	/*if (window['gemni_oauth2_token'])
 	{
 		try
 		{
@@ -5351,7 +5349,7 @@ function runUpdate(query, callback, parameters)
 			oauth2.login(window['gemni_oauth2_request'], oauth2_refresh_callback, oauth2_error_callback);
 			return;
 		}
-	}
+	}*/
 }
 
 /*function runUpdate(query, callback, parameters)
@@ -5442,7 +5440,8 @@ function proxy_error_callback(request, status, error)
 	//alert(error);
 	//alert(request.responseText);
 	//alert(request.responseXML);
-	window[request['ftcallback']](null, request['ftparameters']);
+	//window[request['ftcallback']](null, request['ftparameters']);
+	oauth2_error_callback(error);
 }
 
 function proxy_complete_callback(request, status)
